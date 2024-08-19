@@ -1,0 +1,34 @@
+[gd_scene load_steps=4 format=3 uid="uid://bq7s2yf0fohes"]
+
+[ext_resource type="Script" path="res://addons/boid_2d/boid.gd" id="1_xwhwb"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ackok"]
+size = Vector2(32, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ipkm3"]
+size = Vector2(60, 60)
+
+[node name="Boid" type="Area2D" node_paths=PackedStringArray("wallcast", "vision")]
+collision_mask = 0
+monitoring = false
+script = ExtResource("1_xwhwb")
+wallcast = NodePath("WallCast")
+vision = NodePath("Vision")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_ackok")
+
+[node name="WallCast" type="RayCast2D" parent="."]
+enabled = false
+target_position = Vector2(50, 0)
+
+[node name="Vision" type="Area2D" parent="."]
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Vision"]
+position = Vector2(42, 0)
+shape = SubResource("RectangleShape2D_ipkm3")
+
+[connection signal="area_entered" from="Vision" to="." method="_on_vision_area_entered"]
+[connection signal="area_exited" from="Vision" to="." method="_on_vision_area_exited"]
