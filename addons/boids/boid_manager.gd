@@ -72,11 +72,14 @@ func _process_boids() -> void:
 			args[iidx].boid.apply_force(forces[iidx])
 
 func _pack_calc_args_flock(flock: Flock) -> Dictionary:
-	var others_pos := PackedVector3Array([])
-	var others_vel := PackedVector3Array([])
+	var num_of_boids := flock.boids.size()
+	var others_pos := PackedVector3Array([]); others_pos.resize(num_of_boids)
+	var others_vel := PackedVector3Array([]); others_vel.resize(num_of_boids)
+	var idx := 0
 	for aboid in flock.boids.values():
-		others_pos.append(aboid._get_boid_position())
-		others_vel.append(aboid._get_boid_velocity())
+		others_pos.set(idx, aboid._get_boid_position())
+		others_vel.set(idx, aboid._get_boid_velocity())
+		idx += 1
 	var flock_args := {
 		'others_pos': others_pos,
 		'others_vel': others_vel,
@@ -98,9 +101,11 @@ func _pack_calc_args_boid(boid, args: Dictionary) -> Dictionary:
 func _calculate_boid_parallel(idx: int, read_from: Array[Array], write_to: Array[PackedVector3Array]) -> void:
 	var args = read_from[idx]
 	var forces = write_to[idx]
-	for iidx in args.size():
-		var force = _calculate_boid(args[iidx])
-		forces[iidx] = force
+	var arg_idx := 0
+	for arg in args:
+		var force = _calculate_boid(arg)
+		forces[arg_idx] = force
+		arg_idx += 1
 
 func _calculate_boid(args: Dictionary) -> Vector3:
 	var boid_properties: BoidProperties = args.self_props
@@ -115,23 +120,31 @@ func _calculate_boid(args: Dictionary) -> Vector3:
 	var align_count := 0
 	var cohere_count := 0
 	
+	var goal_seperation: float = args.goal_seperation
+	var goal_alignment: float = args.goal_alignment
+	var goal_cohesion: float = args.goal_cohesion
+	var others_pos: PackedVector3Array = args.others_pos
+	var others_vel: PackedVector3Array = args.others_vel
 	var aboid_idx := 0
-	for aboid_pos in args.others_pos:
-		var dist = boid_pos.distance_to(aboid_pos)
+	# iterating over the packed array for pos is faster, we use pos always, vel only in one case
+	for aboid_pos in others_pos:
+		# faster for when checking, we can just sqrt later for calculating steering
+		var dist = boid_pos.distance_squared_to(aboid_pos)
 		if dist >= EPSILON:
-			var diff = (boid_pos - aboid_pos).normalized() / dist
-			if dist < args.goal_seperation: steer += diff; steer_count += 1
-			if dist < args.goal_alignment: align += args.others_vel[aboid_idx]; align_count += 1
-			if dist < args.goal_cohesion: cohere += aboid_pos; cohere_count += 1
+			if dist < goal_seperation:
+				var diff = (boid_pos - aboid_pos).normalized() / sqrt(dist)
+				steer += diff; steer_count += 1
+			if dist < goal_alignment: align += others_vel[aboid_idx]; align_count += 1
+			if dist < goal_cohesion: cohere += aboid_pos; cohere_count += 1
 		aboid_idx += 1
 	
 	if steer_count > 0: steer /= steer_count
 	if align_count > 0: align /= align_count
 	if cohere_count > 0: cohere /= cohere_count; cohere -= boid_pos
 	
-	if align.length() > 0.0: align = (align.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
-	if steer.length() > 0.0: steer = (steer.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
-	if cohere.length() > 0.0: cohere = (cohere.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
+	if align.length_squared() > 0.0: align = (align.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
+	if steer.length_squared() > 0.0: steer = (steer.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
+	if cohere.length_squared() > 0.0: cohere = (cohere.normalized() * boid_properties.max_speed - boid_vel).limit_length(boid_properties.max_force)
 	
 	var target := Vector3.ZERO
 	var target_position := args.get('target_position')

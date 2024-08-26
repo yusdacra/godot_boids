@@ -1,9 +1,9 @@
 extends Node
 class_name Flock
 
-@export var goal_seperation: float = 25.0
-@export var goal_alignment: float = 50.0
-@export var goal_cohesion: float = 50.0
+@export var goal_seperation: float = 25.0 ** 2
+@export var goal_alignment: float = 50.0 ** 2
+@export var goal_cohesion: float = 50.0 ** 2
 
 var boids: Dictionary = {}
 

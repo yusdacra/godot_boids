@@ -8,15 +8,3 @@ script = ExtResource("1_3gcrf")
 
 [node name="Flock" type="Node" parent="."]
 script = ExtResource("2_1xeeb")
-
-[node name="Flock2" type="Node" parent="."]
-script = ExtResource("2_1xeeb")
-
-[node name="Flock3" type="Node" parent="."]
-script = ExtResource("2_1xeeb")
-
-[node name="Flock4" type="Node" parent="."]
-script = ExtResource("2_1xeeb")
-
-[node name="Flock5" type="Node" parent="."]
-script = ExtResource("2_1xeeb")
