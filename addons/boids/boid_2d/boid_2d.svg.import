@@ -2,16 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://rk5u1wthr0n0"
-path="res://.godot/imported/example_boid.svg-ebae3589d3b59182aead052ab0bb5c16.ctex"
+uid="uid://c32akbxu1rkj8"
+path="res://.godot/imported/boid_2d.svg-4548c85817be0f2e607fa4357493b734.ctex"
 metadata={
+"has_editor_variant": true,
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://examples/boid_2d/example_boid.svg"
-dest_files=["res://.godot/imported/example_boid.svg-ebae3589d3b59182aead052ab0bb5c16.ctex"]
+source_file="res://addons/boids/boid_2d/boid_2d.svg"
+dest_files=["res://.godot/imported/boid_2d.svg-4548c85817be0f2e607fa4357493b734.ctex"]
 
 [params]
 
@@ -32,6 +33,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=6.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
+svg/scale=1.0
+editor/scale_with_editor_scale=true
+editor/convert_colors_with_editor_theme=true

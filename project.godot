@@ -11,14 +11,31 @@ config_version=5
 [application]
 
 config/name="Boid Addon"
-run/main_scene="res://examples/boid_2d/simple/example.tscn"
+run/main_scene="res://examples/boids/2d/simple/example.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
+
+[autoload]
+
+BoidManager="*res://addons/boids/boid_manager.gd"
+
+[debug]
+
+settings/stdout/verbose_stdout=true
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/boid_2d/plugin.cfg")
+enabled=PackedStringArray("res://addons/boids/plugin.cfg")
+
+[physics]
+
+2d/run_on_separate_thread=true
+3d/run_on_separate_thread=true
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
+
+[threading]
+
+worker_pool/max_threads=20

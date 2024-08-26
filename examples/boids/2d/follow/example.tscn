@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://ckc0dhvrksfh4"]
+[gd_scene load_steps=4 format=3 uid="uid://ckc0dhvrksfh4"]
 
-[ext_resource type="Script" path="res://examples/boid_2d/follow/example.gd" id="1_cb4mx"]
+[ext_resource type="Script" path="res://examples/boids/2d/follow/example.gd" id="1_cb4mx"]
+[ext_resource type="Script" path="res://addons/boids/flock/flock.gd" id="2_i4bjg"]
 
 [sub_resource type="Curve2D" id="Curve2D_ncwi0"]
 _data = {
@@ -17,3 +18,7 @@ curve = SubResource("Curve2D_ncwi0")
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
 position = Vector2(1117, 34)
 rotation = -2.44507
+
+[node name="Flock" type="Node" parent="." node_paths=PackedStringArray("target")]
+script = ExtResource("2_i4bjg")
+target = NodePath("../Path2D/PathFollow2D")
