@@ -8,12 +8,24 @@ const EPSILON: float = 0.00001
 var SIMULATION_RATE: int = 1
 
 var flocks: Dictionary = {}
+var total_boid_count: int = 0:
+	set(new_count):
+		total_boid_count = new_count
+		args_array.resize(total_boid_count)
+		forces_array.resize(total_boid_count)
+
+# create our arrays for parallel processing
+var args_array: Array[Dictionary] = []
+var forces_array: PackedVector3Array = []
 
 func _ready() -> void:
 	get_tree().node_added.connect(_register_flock)
 	get_tree().node_removed.connect(_unregister_flock)
 	
 	_init_register_flock()
+	
+	args_array.resize(total_boid_count)
+	forces_array.resize(total_boid_count)
 
 func _init_register_flock(node: Node = get_tree().root) -> void:
 	_register_flock(node)
@@ -36,40 +48,34 @@ func _physics_process(delta: float) -> void:
 		_process_boids()
 
 func _process_boids() -> void:
-	# organize the work into tasks
+	var total_parallel_tasks := total_boid_count / PARALLELIZATION_RATE
+	if total_boid_count % PARALLELIZATION_RATE > 0: total_parallel_tasks += 1
+	
 	var boid_count := 0
-	var boids_array_idx := 0
-	var args_arrays: Array[Array] = [[]]
-	var force_arrays: Array[PackedVector3Array] = [PackedVector3Array([])]
+	# organize the work into tasks
 	for flock: Flock in flocks.values():
 		var flock_args := _pack_calc_args_flock(flock)
 		for boid in flock.boids.values():
 			var args := _pack_calc_args_boid(boid, flock_args.duplicate())
-			args_arrays[boids_array_idx].append(args)
-			force_arrays[boids_array_idx].append(Vector3.ZERO)
+			args_array[boid_count] = args
+			forces_array[boid_count] = Vector3.ZERO
 			boid_count += 1
-			if boid_count > PARALLELIZATION_RATE:
-				boid_count = 0
-				boids_array_idx += 1
-				args_arrays.append([])
-				force_arrays.append(PackedVector3Array([]))
 	
 	# distribute tasks to threads
 	# TODO: calculate on main thread if there arent enough boids to warrant doing this
 	var calc_task := WorkerThreadPool.add_group_task(
-		_calculate_boid_parallel.bind(args_arrays, force_arrays),
-		args_arrays.size(),
-		args_arrays.size(),
+		_calculate_boid_parallel,
+		total_parallel_tasks,
+		total_parallel_tasks,
 		true,
 	)
 	WorkerThreadPool.wait_for_group_task_completion(calc_task)
 	
 	# apply the forces
-	for idx in args_arrays.size():
-		var args = args_arrays[idx]
-		var forces = force_arrays[idx]
-		for iidx in args.size():
-			args[iidx].boid.apply_force(forces[iidx])
+	var idx := 0
+	for force in forces_array:
+		args_array[idx].boid.apply_force(force)
+		idx += 1
 
 func _pack_calc_args_flock(flock: Flock) -> Dictionary:
 	var num_of_boids := flock.boids.size()
@@ -98,13 +104,13 @@ func _pack_calc_args_boid(boid, args: Dictionary) -> Dictionary:
 	args['self_pos'] = boid._get_boid_position()
 	return args
 
-func _calculate_boid_parallel(idx: int, read_from: Array[Array], write_to: Array[PackedVector3Array]) -> void:
-	var args = read_from[idx]
-	var forces = write_to[idx]
-	var arg_idx := 0
-	for arg in args:
-		var force = _calculate_boid(arg)
-		forces[arg_idx] = force
+func _calculate_boid_parallel(idx: int) -> void:
+	var start_from := PARALLELIZATION_RATE * idx
+	var end_at := mini(start_from + PARALLELIZATION_RATE, total_boid_count)
+	var arg_idx := start_from
+	while arg_idx < end_at:
+		var force = _calculate_boid(args_array[arg_idx])
+		forces_array[arg_idx] = force
 		arg_idx += 1
 
 func _calculate_boid(args: Dictionary) -> Vector3:
@@ -130,7 +136,7 @@ func _calculate_boid(args: Dictionary) -> Vector3:
 	for aboid_pos in others_pos:
 		# faster for when checking, we can just sqrt later for calculating steering
 		var dist = boid_pos.distance_squared_to(aboid_pos)
-		if dist >= EPSILON:
+		if dist > EPSILON:
 			if dist < goal_seperation:
 				var diff = (boid_pos - aboid_pos).normalized() / sqrt(dist)
 				steer += diff; steer_count += 1

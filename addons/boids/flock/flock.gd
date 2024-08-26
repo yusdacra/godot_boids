@@ -26,9 +26,11 @@ func _register_boid(maybe_boid: Node) -> void:
 	if maybe_boid is not Boid2D and maybe_boid is not Boid3D: return
 	maybe_boid.flock = self
 	boids[maybe_boid.get_instance_id()] = maybe_boid
+	BoidManager.total_boid_count += 1
 	print_verbose("[", self, "]", " boid ", maybe_boid, " registered")
 
 func _unregister_boid(maybe_boid: Node) -> void:
 	if maybe_boid is not Boid2D and maybe_boid is not Boid3D: return
 	boids.erase(maybe_boid.get_instance_id())
+	BoidManager.total_boid_count -= 1
 	print_verbose("[", self, "]", " boid ", maybe_boid, " unregistered")

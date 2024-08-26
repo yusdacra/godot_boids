@@ -26,11 +26,6 @@ settings/stdout/verbose_stdout=true
 
 enabled=PackedStringArray("res://addons/boids/plugin.cfg")
 
-[physics]
-
-2d/run_on_separate_thread=true
-3d/run_on_separate_thread=true
-
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
