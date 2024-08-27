@@ -4,8 +4,6 @@ extends Node
 # this seems to help with 1000 boids in a single flock from 400ms to 180ms (before quadtrees)
 const PARALLELIZATION_RATE: int = 50 # 50 seems to be the best value?
 const EPSILON: float = 0.00001
-# simulate per n physics frame ticks
-var SIMULATION_RATE: int = 1
 
 var flocks: Dictionary = {}
 var total_boid_count: int = 0:
@@ -17,6 +15,7 @@ var total_boid_count: int = 0:
 # create our arrays for parallel processing
 var args_array: Array[Dictionary] = []
 var forces_array: PackedVector3Array = []
+#var grids: Dictionary = {}
 
 func _ready() -> void:
 	get_tree().node_added.connect(_register_flock)
@@ -34,18 +33,20 @@ func _init_register_flock(node: Node = get_tree().root) -> void:
 
 func _register_flock(maybe_flock: Node) -> void:
 	if maybe_flock is not Flock: return
-	flocks[maybe_flock.get_instance_id()] = maybe_flock
+	var flock_id := maybe_flock.get_instance_id()
+	flocks[flock_id] = maybe_flock
+	#grids[flock_id] = Grid.new()
 	print_verbose("[BoidManager] flock ", maybe_flock, " registered")
 
 func _unregister_flock(maybe_flock: Node) -> void:
 	if maybe_flock is not Flock: return
-	flocks.erase(maybe_flock.get_instance_id())
+	var flock_id := maybe_flock.get_instance_id()
+	flocks.erase(flock_id)
+	#grids.erase(flock_id)
 	print_verbose("[BoidManager] flock ", maybe_flock, " unregistered")
 
 func _physics_process(delta: float) -> void:
-	# run the simulation at a given rate
-	if Engine.get_physics_frames() % SIMULATION_RATE == 0:
-		_process_boids()
+	_process_boids()
 
 func _process_boids() -> void:
 	var total_parallel_tasks := total_boid_count / PARALLELIZATION_RATE
@@ -55,8 +56,10 @@ func _process_boids() -> void:
 	# organize the work into tasks
 	for flock: Flock in flocks.values():
 		var flock_args := _pack_calc_args_flock(flock)
-		for boid in flock.boids.values():
-			var args := _pack_calc_args_boid(boid, flock_args.duplicate())
+		var boids := flock.boids.values()
+		#grids.get(flock.get_instance_id()).build(Vector3.ONE * 1000.0, 30.0, boids)
+		for boid in boids:
+			var args := _pack_calc_args_boid(flock, boid, flock_args.duplicate())
 			args_array[boid_count] = args
 			forces_array[boid_count] = Vector3.ZERO
 			boid_count += 1
@@ -97,7 +100,17 @@ func _pack_calc_args_flock(flock: Flock) -> Dictionary:
 		flock_args['target_position'] = flock.target.global_position
 	return flock_args
 
-func _pack_calc_args_boid(boid, args: Dictionary) -> Dictionary:
+func _pack_calc_args_boid(flock: Flock, boid, args: Dictionary) -> Dictionary:
+	#var nearby_boids: Array[Node] = grids.get(flock.get_instance_id()).get_nearby_boids(boid)
+	#var others_pos := PackedVector3Array([]); others_pos.resize(nearby_boids.size())
+	#var others_vel := PackedVector3Array([]); others_vel.resize(nearby_boids.size())
+	#var idx := 0
+	#for aboid in nearby_boids:
+		#others_pos.set(idx, aboid._get_boid_position())
+		#others_vel.set(idx, aboid._get_boid_velocity())
+		#idx += 1
+	#args['others_pos'] = others_pos
+	#args['others_vel'] = others_vel
 	args['boid'] = boid
 	args['self_props'] = boid.properties
 	args['self_vel'] = boid._get_boid_velocity()
@@ -109,7 +122,7 @@ func _calculate_boid_parallel(idx: int) -> void:
 	var end_at := mini(start_from + PARALLELIZATION_RATE, total_boid_count)
 	var arg_idx := start_from
 	while arg_idx < end_at:
-		var force = _calculate_boid(args_array[arg_idx])
+		var force := _calculate_boid(args_array[arg_idx])
 		forces_array[arg_idx] = force
 		arg_idx += 1
 

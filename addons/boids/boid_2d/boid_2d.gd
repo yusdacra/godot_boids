@@ -10,12 +10,14 @@ var velocity := Vector2.ZERO
 # this is assigned by the flock, if this boid is a child of it
 var flock: Flock
 
+var last_processed_in: int = 0
+
 ## applies some force to this boid.
 func apply_force(spatial_force: Vector3) -> void:
 	var force := Vector2(spatial_force.x, spatial_force.y)
 	velocity += force
 	velocity = velocity.limit_length(properties.max_speed)
-	position += velocity * BoidManager.SIMULATION_RATE
+	position += velocity
 
 func _get_boid_position() -> Vector3:
 	return Vector3(position.x, position.y, 0.0)
