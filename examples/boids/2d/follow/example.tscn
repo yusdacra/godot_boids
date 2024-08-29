@@ -1,13 +1,14 @@
 [gd_scene load_steps=4 format=3 uid="uid://ckc0dhvrksfh4"]
 
 [ext_resource type="Script" path="res://examples/boids/2d/follow/example.gd" id="1_cb4mx"]
-[ext_resource type="Script" path="res://addons/boids/flock/flock.gd" id="2_i4bjg"]
 
 [sub_resource type="Curve2D" id="Curve2D_ncwi0"]
 _data = {
 "points": PackedVector2Array(69.2957, 57.9564, -69.2957, -57.9564, 1117, 34, 79.375, -118.433, -79.375, 118.433, 34, 28, -61.7361, -114.653, 61.7361, 114.653, 22, 624, -42.8373, 69.2957, 42.8373, -69.2957, 1126, 622, 66.7758, 73.0754, -66.7758, -73.0754, 1117, 34)
 }
 point_count = 5
+
+[sub_resource type="FlockProperties" id="FlockProperties_id14j"]
 
 [node name="Example" type="Node2D"]
 script = ExtResource("1_cb4mx")
@@ -19,6 +20,6 @@ curve = SubResource("Curve2D_ncwi0")
 position = Vector2(1117, 34)
 rotation = -2.44507
 
-[node name="Flock" type="Node" parent="." node_paths=PackedStringArray("target")]
-script = ExtResource("2_i4bjg")
+[node name="Flock" type="Flock2D" parent="." node_paths=PackedStringArray("target")]
+properties = SubResource("FlockProperties_id14j")
 target = NodePath("../Path2D/PathFollow2D")
