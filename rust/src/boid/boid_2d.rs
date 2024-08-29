@@ -5,6 +5,8 @@ use crate::{BoidProperties, Flock2D};
 
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
+/// A 2D boid.
+/// Doesn't do anything on it's own, must be a child of a `Flock2D`.
 pub struct Boid2D {
     #[export]
     /// The properties of this boid.

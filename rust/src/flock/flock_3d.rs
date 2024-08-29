@@ -9,6 +9,8 @@ use super::Flock;
 
 #[derive(GodotClass)]
 #[class(init, base=Node3D)]
+/// A flock that holds 3D boids.
+/// Adding `Boid3D` as a child of this node will register the boid.
 pub struct Flock3D {
     #[export]
     /// Properties of this flock.
@@ -60,6 +62,7 @@ impl INode3D for Flock3D {
 impl Flock3D {
     #[func]
     #[inline(always)]
+    /// Retrieve the ID of this flock.
     pub fn get_id(&self) -> i64 {
         self.base().instance_id().to_i64()
     }

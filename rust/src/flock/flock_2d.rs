@@ -7,6 +7,8 @@ use super::Flock;
 
 #[derive(GodotClass)]
 #[class(init, base=Node2D)]
+/// A flock that holds 2D boids.
+/// Adding `Boid2D` as a child of this node will register the boid.
 pub struct Flock2D {
     #[export]
     /// Properties of this flock.
@@ -58,6 +60,7 @@ impl INode2D for Flock2D {
 impl Flock2D {
     #[func]
     #[inline(always)]
+    /// Retrieve the ID of this flock.
     pub fn get_id(&self) -> i64 {
         self.base().instance_id().to_i64()
     }

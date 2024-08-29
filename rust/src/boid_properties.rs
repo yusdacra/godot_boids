@@ -2,6 +2,7 @@ use godot::prelude::*;
 
 #[derive(Default, Clone, Debug, GodotClass)]
 #[class(tool, init, base=Resource)]
+/// Properties for a 2D/3D boid.
 pub struct BoidProperties {
     #[export]
     #[init(val = 4.0)]

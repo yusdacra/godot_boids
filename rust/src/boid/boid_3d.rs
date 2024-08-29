@@ -5,6 +5,8 @@ use crate::{to_glam_vec, BoidProperties, Flock3D};
 
 #[derive(GodotClass)]
 #[class(init, base=Node3D)]
+/// A 3D boid.
+/// Doesn't do anything on it's own, must be a child of a `Flock3D`.
 pub struct Boid3D {
     #[export]
     /// The properties of this boid.

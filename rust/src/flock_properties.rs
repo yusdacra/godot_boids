@@ -2,6 +2,7 @@ use godot::prelude::*;
 
 #[derive(Default, Clone, Debug, GodotClass)]
 #[class(tool, init, base=Resource)]
+/// Properties for a 2D/3D flock.
 pub struct FlockProperties {
     #[export]
     #[init(val = 625.0)]
