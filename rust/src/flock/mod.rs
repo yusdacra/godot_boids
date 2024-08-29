@@ -3,6 +3,7 @@ use crate::{BoidProperties, FlockProperties};
 use glam::*;
 
 pub mod flock_2d;
+pub mod flock_3d;
 
 pub trait Flock {
     fn get_flock_properties(&self) -> &FlockProperties;

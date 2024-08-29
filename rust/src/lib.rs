@@ -16,7 +16,7 @@ mod flock_properties;
 
 pub use boid::{boid_2d::*, boid_3d::*, Boid};
 pub use boid_properties::BoidProperties;
-pub use flock::{flock_2d::*, Flock};
+pub use flock::{flock_2d::*, flock_3d::*, Flock};
 pub use flock_properties::FlockProperties;
 
 use rustc_hash::FxBuildHasher;
@@ -115,8 +115,13 @@ impl INode for BoidsProcess {
     #[inline(always)]
     fn physics_process(&mut self, _: f64) {
         if self.get_engine_singleton().get_physics_frames() % (self.process_per_tick as u64) == 0 {
-            if self.process_2d {
-                self.get_boids_singleton().bind_mut().process_boids_2d();
+            let (process_2d, process_3d) = (self.process_2d, self.process_3d);
+            let mut s = self.get_boids_singleton().bind_mut();
+            if process_2d {
+                s.process_boids_2d();
+            }
+            if process_3d {
+                s.process_boids_3d();
             }
         }
     }
@@ -128,6 +133,8 @@ impl INode for BoidsProcess {
 struct Boids {
     flocks2d: FxIndexMap<i64, Gd<Flock2D>>,
     boids2d: FxIndexMap<i64, Gd<Boid2D>>,
+    flocks3d: FxIndexMap<i64, Gd<Flock3D>>,
+    boids3d: FxIndexMap<i64, Gd<Boid3D>>,
     base: Base<Object>,
 }
 
@@ -152,6 +159,27 @@ impl Boids {
     fn unregister_boid_2d(&mut self, boid_id: i64) {
         self.boids2d.shift_remove(&boid_id);
     }
+
+    fn register_flock_3d(&mut self, flock_id: i64) {
+        let flock = godot::global::instance_from_id(flock_id).unwrap().cast();
+        self.flocks3d.insert(flock_id, flock);
+        godot_print!("[Boids] flock {flock_id} registered");
+    }
+
+    fn unregister_flock_3d(&mut self, flock_id: i64) {
+        self.flocks3d.shift_remove(&flock_id);
+        godot_print!("[Boids] flock {flock_id} unregistered");
+    }
+
+    #[inline(always)]
+    fn register_boid_3d(&mut self, boid_id: i64, boid: Gd<Boid3D>) {
+        self.boids3d.insert(boid_id, boid);
+    }
+
+    #[inline(always)]
+    fn unregister_boid_3d(&mut self, boid_id: i64) {
+        self.boids3d.shift_remove(&boid_id);
+    }
 }
 
 #[godot_api]
@@ -166,6 +194,14 @@ impl Boids {
 
     #[func]
     #[inline(always)]
+    /// Process all 3D boids once.
+    /// NOTE: This function is not intended to be manually called. Prefer using `BoidsProcess` as an autoload singleton where possible.
+    fn process_boids_3d(&mut self) {
+        process_boids(&mut self.boids3d, &self.flocks3d)
+    }
+
+    #[func]
+    #[inline(always)]
     /// Gets the total 2D boid count.
     fn get_total_boid_2d_count(&self) -> i64 {
         self.boids2d.len() as i64
@@ -176,6 +212,20 @@ impl Boids {
     /// Gets the total 2D flock count.
     fn get_total_flock_2d_count(&self) -> i64 {
         self.flocks2d.len() as i64
+    }
+
+    #[func]
+    #[inline(always)]
+    /// Gets the total 3D boid count.
+    fn get_total_boid_3d_count(&self) -> i64 {
+        self.boids3d.len() as i64
+    }
+
+    #[func]
+    #[inline(always)]
+    /// Gets the total 3D flock count.
+    fn get_total_flock_3d_count(&self) -> i64 {
+        self.flocks3d.len() as i64
     }
 }
 
