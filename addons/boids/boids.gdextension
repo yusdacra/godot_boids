@@ -5,11 +5,11 @@ reloadable = true
 
 [libraries]
 linux.debug.x86_64 =     "res://rust/target/debug/libboids.so"
-linux.release.x86_64 =   "res://lib/libboids.x86.so"
 windows.debug.x86_64 =   "res://rust/target/debug/boids.dll"
-windows.release.x86_64 = "res://lib/boids.x86.dll"
-macos.release =          "res://lib/libboids.x86.dylib"
-macos.release.arm64 =    "res://lib/libboids.arm64.dylib"
+linux.release.x86_64 =   "res://addons/boids/lib/libboids.x86.so"
+windows.release.x86_64 = "res://addons/boids/lib/boids.x86.dll"
+macos.release =          "res://addons/boids/lib/libboids.x86.dylib"
+macos.release.arm64 =    "res://addons/boids/lib/libboids.arm64.dylib"
 
 [icons]
 BoidProperties = "res://addons/boids/resources/boid_properties.svg"

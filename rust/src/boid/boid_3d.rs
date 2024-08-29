@@ -29,6 +29,13 @@ impl Boid3D {
 
     #[func]
     #[inline(always)]
+    /// Set the current velocity of this boid.
+    fn set_velocity(&mut self, new_velocity: Vector3) {
+        self.vel = to_glam_vec(new_velocity);
+    }
+
+    #[func]
+    #[inline(always)]
     /// Get the ID of this boid.
     pub fn get_id(&self) -> i64 {
         self.base().instance_id().to_i64()

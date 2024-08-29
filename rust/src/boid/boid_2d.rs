@@ -29,6 +29,14 @@ impl Boid2D {
 
     #[func]
     #[inline(always)]
+    /// Set the current velocity of this boid.
+    fn set_velocity(&mut self, new_velocity: Vector2) {
+        self.vel.x = new_velocity.x;
+        self.vel.y = new_velocity.y;
+    }
+
+    #[func]
+    #[inline(always)]
     /// Get the ID of this boid.
     pub fn get_id(&self) -> i64 {
         self.base().instance_id().to_i64()
