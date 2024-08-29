@@ -9,9 +9,12 @@ use super::Flock;
 #[class(init, base=Node2D)]
 pub struct Flock2D {
     #[export]
+    /// Properties of this flock.
+    /// Note: this cannot be changed in runtime, aside from removing and readding the node.
     properties: Gd<FlockProperties>,
     props: FlockProperties,
     #[export]
+    /// A target node for the flock to follow.
     target: Option<Gd<Node2D>>,
     pub boids: FxIndexMap<i64, Gd<Boid2D>>,
     base: Base<Node2D>,

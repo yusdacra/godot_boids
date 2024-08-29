@@ -7,6 +7,8 @@ use crate::{BoidProperties, Flock2D};
 #[class(init, base=Node2D)]
 pub struct Boid2D {
     #[export]
+    /// The properties of this boid.
+    /// Note: this cannot be changed in runtime, aside from removing and readding the node.
     properties: Gd<BoidProperties>,
     props: BoidProperties,
     vel: Vec2,
@@ -18,18 +20,21 @@ pub struct Boid2D {
 impl Boid2D {
     #[func]
     #[inline(always)]
+    /// Get the current velocity of this boid.
     fn get_velocity(&self) -> Vector2 {
         Vector2::new(self.vel.x, self.vel.y)
     }
 
     #[func]
     #[inline(always)]
+    /// Get the ID of this boid.
     pub fn get_id(&self) -> i64 {
         self.base().instance_id().to_i64()
     }
 
     #[func]
     #[inline(always)]
+    /// Get the flock ID of this boid.
     pub fn get_flock_id(&self) -> i64 {
         self.flock_id
     }

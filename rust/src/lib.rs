@@ -73,13 +73,20 @@ unsafe impl ExtensionLibrary for BoidsExtension {
 
 #[derive(GodotClass)]
 #[class(init, base=Node)]
+/// Node that will make calls automatically to process 2D/3D boids, providing some configuration options.
+/// It's best to use this as an autoload singleton.
 pub struct BoidsProcess {
     #[export]
+    #[init(val = true)]
+    /// Whether to process 2D boids or not.
     process_2d: bool,
     #[export]
+    #[init(val = true)]
+    /// Whether to process 3D boids or not.
     process_3d: bool,
     #[export]
     #[init(val = 1)]
+    /// Process boids per N physics ticks.
     process_per_tick: i64,
     boids: Option<Gd<Boids>>,
     engine: Option<Gd<Engine>>,
@@ -117,6 +124,7 @@ impl INode for BoidsProcess {
 
 #[derive(GodotClass)]
 #[class(init, base=Object)]
+/// Singleton that holds all boids and flocks and manages them.
 struct Boids {
     flocks2d: FxIndexMap<i64, Gd<Flock2D>>,
     boids2d: FxIndexMap<i64, Gd<Boid2D>>,
@@ -150,14 +158,24 @@ impl Boids {
 impl Boids {
     #[func]
     #[inline(always)]
+    /// Process all 2D boids once.
+    /// NOTE: This function is not intended to be manually called. Prefer using `BoidsProcess` as an autoload singleton where possible.
     fn process_boids_2d(&mut self) {
         process_boids(&mut self.boids2d, &self.flocks2d)
     }
 
     #[func]
     #[inline(always)]
-    fn get_total_boid_count(&self) -> i64 {
+    /// Gets the total 2D boid count.
+    fn get_total_boid_2d_count(&self) -> i64 {
         self.boids2d.len() as i64
+    }
+
+    #[func]
+    #[inline(always)]
+    /// Gets the total 2D flock count.
+    fn get_total_flock_2d_count(&self) -> i64 {
+        self.flocks2d.len() as i64
     }
 }
 
@@ -202,8 +220,8 @@ where
     }
     #[cfg(feature = "stats")]
     godot_print!(
-        "[Boids] preparing all calculations took {} ms",
-        time.elapsed().as_millis()
+        "[Boids] preparing all calculations took {} micros",
+        time.elapsed().as_micros()
     );
 
     #[cfg(feature = "stats")]
@@ -211,7 +229,7 @@ where
     let forces: Vec<(i64, Vec3)> = calc_funcs
         .into_par_iter()
         .fold(
-            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count / 10),
+            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count),
             |mut acc, (boid_id, calc_fn)| {
                 let force = calc_fn();
                 acc.push((boid_id, force));
@@ -219,7 +237,7 @@ where
             },
         )
         .reduce(
-            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count / 10),
+            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count),
             |mut left, mut right| {
                 left.append(&mut right);
                 left
@@ -227,19 +245,19 @@ where
         );
     #[cfg(feature = "stats")]
     godot_print!(
-        "[Boids] calculating all boids took {} ms",
-        time.elapsed().as_millis()
+        "[Boids] calculating all boids took {} micros",
+        time.elapsed().as_micros()
     );
 
     #[cfg(feature = "stats")]
     let time = std::time::Instant::now();
     for (boid_id, force) in forces {
-        let boid = boids.get_mut(&boid_id).unwrap();
+        let boid = unsafe { boids.get_mut(&boid_id).unwrap_unchecked() };
         boid.bind_mut().apply_force(force);
     }
     #[cfg(feature = "stats")]
     godot_print!(
-        "[Boids] applying forces took {} ms",
-        time.elapsed().as_millis()
+        "[Boids] applying forces took {} micros",
+        time.elapsed().as_micros()
     );
 }
