@@ -74,7 +74,7 @@ unsafe impl ExtensionLibrary for BoidsExtension {
 #[derive(GodotClass)]
 #[class(init, base=Node)]
 /// Node that will make calls automatically to process 2D/3D boids, providing some configuration options.
-/// It's best to use this as an autoload singleton.
+/// It's best to use this as an autoload singleton. The plugin will register an autoload by default so you don't have to set this up yourself.
 pub struct BoidsProcess {
     #[export]
     #[init(val = true)]

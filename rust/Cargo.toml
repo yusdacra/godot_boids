@@ -10,7 +10,7 @@ crate-type = ["cdylib"]
 stats = []
 
 [dependencies]
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["api-4-3", "experimental-threads"] }
+godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["api-4-3", "experimental-threads", "register-docs"] }
 glam = { version = "0.28", features = ["fast-math"] }
 rayon = { version = "1.10" }
 rustc-hash = "2"
