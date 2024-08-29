@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://drjkd138np2bs"
-path="res://.godot/imported/boid_3d.svg-88c9926717ca573fea33e015b5e5eabe.ctex"
+uid="uid://c2uweiyvhkth2"
+path="res://.godot/imported/flock_3d.svg-acc5687a4886765157480151046c93a8.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/boids/boid_3d/boid_3d.svg"
-dest_files=["res://.godot/imported/boid_3d.svg-88c9926717ca573fea33e015b5e5eabe.ctex"]
+source_file="res://addons/boids/resources/flock_3d.svg"
+dest_files=["res://.godot/imported/flock_3d.svg-acc5687a4886765157480151046c93a8.ctex"]
 
 [params]
 

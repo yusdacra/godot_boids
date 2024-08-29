@@ -2,9 +2,9 @@ extends Node2D
 
 func _ready() -> void:
 	for flock in get_children():
-		for i in 100: spawnBoid(flock)
+		for i in 1000: spawnBoid(flock)
 
-func spawnBoid(flock: Flock) -> void:
+func spawnBoid(flock: Flock2D) -> void:
 	var boid: Boid2D = preload("../example_boid.tscn").instantiate()
 	var screensize := get_viewport_rect().size
 	boid.modulate = Color(randf(), randf(), randf(), 1)

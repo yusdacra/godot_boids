@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c32akbxu1rkj8"
-path="res://.godot/imported/boid_2d.svg-4548c85817be0f2e607fa4357493b734.ctex"
+uid="uid://drjkd138np2bs"
+path="res://.godot/imported/boid_3d.svg-7eb8b2fd8a0459a17418f05b04812bab.ctex"
 metadata={
 "has_editor_variant": true,
 "vram_texture": false
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://addons/boids/boid_2d/boid_2d.svg"
-dest_files=["res://.godot/imported/boid_2d.svg-4548c85817be0f2e607fa4357493b734.ctex"]
+source_file="res://addons/boids/resources/boid_3d.svg"
+dest_files=["res://.godot/imported/boid_3d.svg-7eb8b2fd8a0459a17418f05b04812bab.ctex"]
 
 [params]
 

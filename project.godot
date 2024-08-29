@@ -16,11 +16,7 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]
 
-BoidManager="*res://addons/boids/boid_manager.gd"
-
-[debug]
-
-settings/stdout/verbose_stdout=true
+ProcessBoids="*res://addons/boids/process_boids.tscn"
 
 [editor_plugins]
 
@@ -30,7 +26,3 @@ enabled=PackedStringArray("res://addons/boids/plugin.cfg")
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-
-[threading]
-
-worker_pool/max_threads=20
