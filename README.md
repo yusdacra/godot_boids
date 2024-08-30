@@ -1,17 +1,18 @@
-# boid_2d
+# boids
 
-Addon for Godot that adds a 2D node for simulating boids / flocking.
+Addon for Godot that adds 2D / 3D boids (flocking).
 
 ![boids](./resources/boids.gif)
 
 ## Usage
 
-Clone the repository and copy over the addon.
-Make an inherited scene from `boid.tscn`, add a `Sprite2D` (or whatever visuals you have) and instantiate and spawn many.
-Checkout the examples on how to use it more.
+Clone the repository and copy over the `addons` folder into your project root.
+Check the examples for more info.
 
 ## TODO
 
-- [ ] fix weird spasming behaviour
-- [ ] improve collision (dont only bounce, maybe follow wall in some conditions etc.)
-- [ ] improve performance (BoidManager autoload that tracks and manages every boid?)
+- [ ] memoize calculated distances
+- [ ] implement avoidance (point avoidance, edge avoidance)
+	- [ ] implement nodes for these (for 2d, point and a rect node and 3d point and a cube node, circle / sphere too)
+- [ ] implement partitioning (quadtree/octree)
+- [ ] write better usage documentation
