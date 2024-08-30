@@ -10,6 +10,8 @@ linux.release.x86_64 =   "res://addons/boids/lib/libboids.x86.so"
 windows.release.x86_64 = "res://addons/boids/lib/boids.x86.dll"
 macos.release =          "res://addons/boids/lib/libboids.x86.dylib"
 macos.release.arm64 =    "res://addons/boids/lib/libboids.arm64.dylib"
+web.debug.wasm32 =       "res://rust/target/wasm32-unknown-emscripten/debug/boids.wasm"
+web.release.wasm32 =     "res://addons/boids/lib/boids.wasm"
 
 [icons]
 BoidProperties = "res://addons/boids/resources/boid_properties.svg"
