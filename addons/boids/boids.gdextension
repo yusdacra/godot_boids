@@ -4,16 +4,10 @@ compatibility_minimum = 4.3
 reloadable = true
 
 [libraries]
-<<<<<<< HEAD
-linux.debug.x86_64 =     "res://rust/target/debug/libboids.so"
-windows.debug.x86_64 =   "res://rust/target/debug/boids.dll"
-linux.release.x86_64 =   "res://addons/boids/lib/libboids.x86.so"
-=======
 linux.debug.x86_64 =     "res://addons/boids/lib/boids.x86.so"
 windows.debug.x86_64 =   "res://addons/boids/lib/boids.x86.dll"
 web.debug.wasm32 =       "res://addons/boids/lib/boids.wasm"
 linux.release.x86_64 =   "res://addons/boids/lib/boids.x86.so"
->>>>>>> ca5733d (fix: rebuild libraries, fix paths again)
 windows.release.x86_64 = "res://addons/boids/lib/boids.x86.dll"
 macos.release =          "res://addons/boids/lib/libboids.x86.dylib"
 macos.release.arm64 =    "res://addons/boids/lib/libboids.arm64.dylib"
