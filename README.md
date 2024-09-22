@@ -9,7 +9,9 @@ it can handle about 2000 boids in a single flock at 11ms physics process tick on
 
 ## usage
 
-clone the repository and copy over the `addons` folder into your project root.
+download it from the asset library.
+
+or clone the repository (git lfs is needed) and copy over the `addons` folder into your project root.
 check the examples for more info.
 
 ## development
