@@ -2,4 +2,4 @@
 .godot/
 /android/
 rust/target
-/addons/boids/lib/~*
+/addons/boids/lib/*
