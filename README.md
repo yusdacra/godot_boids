@@ -11,8 +11,8 @@ it can handle about 2000 boids in a single flock at 11ms physics process tick on
 
 download it from the asset library.
 
-or clone the repository (git lfs is needed) and copy over the `addons` folder into your project root.
-check the examples for more info.
+or clone the repository, and run `rust/package-release.sh` to build the libraries for all supported targets.
+(requires [cross](https://github.com/cross-rs/cross))
 
 ## development
 
