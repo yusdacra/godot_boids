@@ -9,7 +9,7 @@ it can handle about 2000 boids in a single flock at 11ms physics process tick on
 
 ## usage
 
-download it from the asset library.
+download it from the [asset library](https://godotengine.org/asset-library/asset/3284).
 
 or clone the repository, and run `rust/package-release.sh` to build the libraries for all supported targets.
 (requires [cross](https://github.com/cross-rs/cross))
