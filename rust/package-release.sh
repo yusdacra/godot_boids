@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -x
+
 cross build --release --target x86_64-unknown-linux-gnu
 cross build --release --target x86_64-pc-windows-gnu
 cross +nightly build -Zbuild-std --release --target wasm32-unknown-emscripten
