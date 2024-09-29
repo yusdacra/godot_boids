@@ -83,9 +83,9 @@ impl Boid for Boid2D {
     #[inline(always)]
     fn apply_force(&mut self, force: Vec3) {
         self.vel += force.xy();
-        let new_vel = self.vel.clamp_length_max(self.props.max_speed);
-        self.vel = new_vel;
-        self.base_mut().translate(Vector2::new(new_vel.x, new_vel.y));
+        self.vel = self.vel.clamp_length_max(self.props.max_speed);
+        let force_to_apply = Vector2::new(self.vel.x, self.vel.y);
+        self.base_mut().translate(force_to_apply);
     }
 
     #[inline(always)]
