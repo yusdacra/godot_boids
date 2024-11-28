@@ -16,7 +16,7 @@ or clone the repository, and run `just build-all` to build the libraries (in rel
 
 ## development
 
-it's just a standard rust project under `rust`, so make sure you have the latest stable rust toolchain installed.
+it's just a standard rust project under `rust`, so make sure you have `rustup` installed (or the toolchain specified under `rust-toolchain.toml`.)
 also don't forget to have godot installed and available in your `PATH` (the extension currently targets 4.3).
 
 - **cargo features**
