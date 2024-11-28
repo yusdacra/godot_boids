@@ -9,15 +9,12 @@ use godot::{
 use indexmap::IndexMap;
 use rayon::prelude::*;
 
+mod obstacle;
 mod boid;
-mod boid_properties;
 mod flock;
-mod flock_properties;
 
-pub use boid::{boid_2d::*, boid_3d::*, Boid};
-pub use boid_properties::BoidProperties;
-pub use flock::{flock_2d::*, flock_3d::*, Flock};
-pub use flock_properties::FlockProperties;
+pub use boid::{*, Boid};
+pub use flock::{*, Flock};
 
 use rustc_hash::FxBuildHasher;
 

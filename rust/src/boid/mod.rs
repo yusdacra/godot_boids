@@ -4,10 +4,15 @@ use std::sync::Arc;
 use glam::*;
 use rayon::prelude::*;
 
-use crate::{BoidProperties, FlockProperties};
+use crate::FlockProperties;
 
 pub mod boid_2d;
 pub mod boid_3d;
+pub mod boid_properties;
+
+pub use boid_2d::*;
+pub use boid_3d::*;
+pub use boid_properties::*;
 
 pub trait Boid {
     fn apply_force(&mut self, force: Vec3);

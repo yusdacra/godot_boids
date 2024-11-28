@@ -28,4 +28,8 @@ pub struct BoidProperties {
     #[init(val = 0.8)]
     /// How much to follow a flock target (if there is one).
     pub targeting: f32,
+    #[export]
+    #[init(val = 1.0)]
+    /// How much to avoid avoidance objects (if there are any).
+    pub avoidance: f32,
 }
