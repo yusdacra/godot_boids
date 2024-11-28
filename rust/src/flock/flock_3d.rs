@@ -26,7 +26,7 @@ pub struct Flock3D {
 
 impl Flock3D {
     pub fn register_boid(&mut self, boid_id: i64) {
-        let boid: Gd<Boid3D> = godot::global::instance_from_id(boid_id).unwrap().cast();
+        let boid: Gd<Boid3D> = Gd::from_instance_id(InstanceId::from_i64(boid_id));
         self.boids.insert(boid_id, boid.clone());
         get_singleton().bind_mut().register_boid_3d(boid_id, boid);
         let flock_id = self.get_id();

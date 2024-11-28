@@ -72,9 +72,8 @@ impl INode2D for Boid2D {
     }
 
     fn exit_tree(&mut self) {
-        let mut flock = godot::global::instance_from_id(self.get_flock_id())
-            .unwrap()
-            .cast::<Flock2D>();
+        let mut flock: Gd<Flock2D> =
+            Gd::from_instance_id(InstanceId::from_i64(self.get_flock_id()));
         flock.bind_mut().unregister_boid(self.get_id());
     }
 }

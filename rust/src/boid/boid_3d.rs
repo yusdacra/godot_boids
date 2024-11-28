@@ -71,9 +71,8 @@ impl INode3D for Boid3D {
     }
 
     fn exit_tree(&mut self) {
-        let mut flock = godot::global::instance_from_id(self.get_flock_id())
-            .unwrap()
-            .cast::<Flock3D>();
+        let mut flock: Gd<Flock3D> =
+            Gd::from_instance_id(InstanceId::from_i64(self.get_flock_id()));
         flock.bind_mut().unregister_boid(self.get_id());
     }
 }

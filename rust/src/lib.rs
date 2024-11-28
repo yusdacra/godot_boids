@@ -25,13 +25,9 @@ type FxIndexMap<K, V> = IndexMap<K, V, FxBuildHasher>;
 
 const SINGLETON_NAME: &str = "Boids";
 
-fn get_singleton_name() -> StringName {
-    StringName::from(SINGLETON_NAME)
-}
-
 fn get_singleton() -> Gd<Boids> {
     Engine::singleton()
-        .get_singleton(get_singleton_name())
+        .get_singleton(SINGLETON_NAME)
         .unwrap()
         .cast()
 }
@@ -43,8 +39,8 @@ unsafe impl ExtensionLibrary for BoidsExtension {
     fn on_level_init(level: InitLevel) {
         match level {
             InitLevel::Scene => {
-                let singleton = Boids::new_alloc().upcast::<Object>();
-                Engine::singleton().register_singleton(get_singleton_name(), singleton);
+                let singleton = Boids::new_alloc();
+                Engine::singleton().register_singleton(SINGLETON_NAME, &singleton);
             }
             _ => (),
         }
@@ -54,18 +50,17 @@ unsafe impl ExtensionLibrary for BoidsExtension {
         if level == InitLevel::Scene {
             // Get the `Engine` instance and `StringName` for your singleton.
             let mut engine = Engine::singleton();
-            let singleton_name = get_singleton_name();
 
             // We need to retrieve the pointer to the singleton object,
             // as it has to be freed manually - unregistering singleton
             // doesn't do it automatically.
             let singleton = engine
-                .get_singleton(singleton_name.clone())
+                .get_singleton(SINGLETON_NAME)
                 .expect("cannot retrieve the singleton");
 
             // Unregistering singleton and freeing the object itself is needed
             // to avoid memory leaks and warnings, especially for hot reloading.
-            engine.unregister_singleton(singleton_name);
+            engine.unregister_singleton(SINGLETON_NAME);
             singleton.free();
         }
     }
@@ -140,7 +135,7 @@ struct Boids {
 
 impl Boids {
     fn register_flock_2d(&mut self, flock_id: i64) {
-        let flock = godot::global::instance_from_id(flock_id).unwrap().cast();
+        let flock = Gd::from_instance_id(InstanceId::from_i64(flock_id));
         self.flocks2d.insert(flock_id, flock);
         godot_print!("[Boids] flock {flock_id} registered");
     }
@@ -161,7 +156,7 @@ impl Boids {
     }
 
     fn register_flock_3d(&mut self, flock_id: i64) {
-        let flock = godot::global::instance_from_id(flock_id).unwrap().cast();
+        let flock = Gd::from_instance_id(InstanceId::from_i64(flock_id));
         self.flocks3d.insert(flock_id, flock);
         godot_print!("[Boids] flock {flock_id} registered");
     }

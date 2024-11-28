@@ -10,14 +10,14 @@ crate-type = ["cdylib"]
 stats = []
 
 [dependencies]
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["api-4-3", "register-docs"] }
+godot = { version = "0.2", features = ["api-4-3", "register-docs"] }
 glam = { version = "0.28", features = ["fast-math"] }
 rayon = { version = "1.10" }
 rustc-hash = "2"
 indexmap = "2.4.0"
 
 [target.wasm32-unknown-emscripten.dependencies]
-godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["api-4-3", "register-docs", "experimental-wasm", "lazy-function-tables"] }
+godot = { version = "0.2", features = ["api-4-3", "register-docs", "experimental-wasm", "lazy-function-tables"] }
 
 [profile.dev]
 opt-level = 1

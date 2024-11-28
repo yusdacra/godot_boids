@@ -24,7 +24,7 @@ pub struct Flock2D {
 
 impl Flock2D {
     pub fn register_boid(&mut self, boid_id: i64) {
-        let boid: Gd<Boid2D> = godot::global::instance_from_id(boid_id).unwrap().cast();
+        let boid: Gd<Boid2D> = Gd::from_instance_id(InstanceId::from_i64(boid_id));
         self.boids.insert(boid_id, boid.clone());
         get_singleton().bind_mut().register_boid_2d(boid_id, boid);
         let flock_id = self.get_id();
