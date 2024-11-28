@@ -9,7 +9,6 @@ use godot::{
 use indexmap::IndexMap;
 use rayon::prelude::*;
 
-mod obstacle;
 mod boid;
 mod flock;
 
@@ -123,53 +122,53 @@ impl INode for BoidsProcess {
 #[class(init, base=Object)]
 /// Singleton that holds all boids and flocks and manages them.
 struct Boids {
-    flocks2d: FxIndexMap<i64, Gd<Flock2D>>,
-    boids2d: FxIndexMap<i64, Gd<Boid2D>>,
-    flocks3d: FxIndexMap<i64, Gd<Flock3D>>,
-    boids3d: FxIndexMap<i64, Gd<Boid3D>>,
+    flocks2d: FxIndexMap<InstanceId, Gd<Flock2D>>,
+    boids2d: FxIndexMap<InstanceId, Gd<Boid2D>>,
+    flocks3d: FxIndexMap<InstanceId, Gd<Flock3D>>,
+    boids3d: FxIndexMap<InstanceId, Gd<Boid3D>>,
     base: Base<Object>,
 }
 
 impl Boids {
-    fn register_flock_2d(&mut self, flock_id: i64) {
-        let flock = Gd::from_instance_id(InstanceId::from_i64(flock_id));
+    fn register_flock_2d(&mut self, flock_id: InstanceId) {
+        let flock = Gd::from_instance_id(flock_id);
         self.flocks2d.insert(flock_id, flock);
         godot_print!("[Boids] flock {flock_id} registered");
     }
 
-    fn unregister_flock_2d(&mut self, flock_id: i64) {
+    fn unregister_flock_2d(&mut self, flock_id: InstanceId) {
         self.flocks2d.shift_remove(&flock_id);
         godot_print!("[Boids] flock {flock_id} unregistered");
     }
 
     #[inline(always)]
-    fn register_boid_2d(&mut self, boid_id: i64, boid: Gd<Boid2D>) {
+    fn register_boid_2d(&mut self, boid_id: InstanceId, boid: Gd<Boid2D>) {
         self.boids2d.insert(boid_id, boid);
     }
 
     #[inline(always)]
-    fn unregister_boid_2d(&mut self, boid_id: i64) {
+    fn unregister_boid_2d(&mut self, boid_id: InstanceId) {
         self.boids2d.shift_remove(&boid_id);
     }
 
-    fn register_flock_3d(&mut self, flock_id: i64) {
-        let flock = Gd::from_instance_id(InstanceId::from_i64(flock_id));
+    fn register_flock_3d(&mut self, flock_id: InstanceId) {
+        let flock = Gd::from_instance_id(flock_id);
         self.flocks3d.insert(flock_id, flock);
         godot_print!("[Boids] flock {flock_id} registered");
     }
 
-    fn unregister_flock_3d(&mut self, flock_id: i64) {
+    fn unregister_flock_3d(&mut self, flock_id: InstanceId) {
         self.flocks3d.shift_remove(&flock_id);
         godot_print!("[Boids] flock {flock_id} unregistered");
     }
 
     #[inline(always)]
-    fn register_boid_3d(&mut self, boid_id: i64, boid: Gd<Boid3D>) {
+    fn register_boid_3d(&mut self, boid_id: InstanceId, boid: Gd<Boid3D>) {
         self.boids3d.insert(boid_id, boid);
     }
 
     #[inline(always)]
-    fn unregister_boid_3d(&mut self, boid_id: i64) {
+    fn unregister_boid_3d(&mut self, boid_id: InstanceId) {
         self.boids3d.shift_remove(&boid_id);
     }
 }
@@ -227,7 +226,7 @@ const fn to_glam_vec(godot_vec: Vector3) -> Vec3 {
 }
 
 #[inline(always)]
-fn process_boids<F, B>(boids: &mut FxIndexMap<i64, Gd<B>>, flocks: &FxIndexMap<i64, Gd<F>>)
+fn process_boids<F, B>(boids: &mut FxIndexMap<InstanceId, Gd<B>>, flocks: &FxIndexMap<InstanceId, Gd<F>>)
 where
     F: Flock + GodotClass,
     F: Bounds<Declarer = DeclUser>,
@@ -268,10 +267,10 @@ where
 
     #[cfg(feature = "stats")]
     let time = std::time::Instant::now();
-    let forces: Vec<(i64, Vec3)> = calc_funcs
+    let forces: Vec<(InstanceId, Vec3)> = calc_funcs
         .into_par_iter()
         .fold(
-            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count),
+            || Vec::<(InstanceId, Vec3)>::with_capacity(total_boid_count),
             |mut acc, (boid_id, calc_fn)| {
                 let force = calc_fn();
                 acc.push((boid_id, force));
@@ -279,7 +278,7 @@ where
             },
         )
         .reduce(
-            || Vec::<(i64, Vec3)>::with_capacity(total_boid_count),
+            || Vec::<(InstanceId, Vec3)>::with_capacity(total_boid_count),
             |mut left, mut right| {
                 left.append(&mut right);
                 left

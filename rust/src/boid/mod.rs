@@ -2,6 +2,7 @@ use std::ops::Sub;
 use std::sync::Arc;
 
 use glam::*;
+use godot::prelude::*;
 use rayon::prelude::*;
 
 use crate::FlockProperties;
@@ -20,7 +21,7 @@ pub trait Boid {
     fn get_boid_velocity(&self) -> Vec3;
     fn get_boid_properties(&self) -> &BoidProperties;
 
-    fn get_flock_id(&self) -> i64;
+    fn get_flock_id(&self) -> InstanceId;
 }
 
 struct CalcArgs {

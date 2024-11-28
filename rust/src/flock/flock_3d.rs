@@ -20,20 +20,20 @@ pub struct Flock3D {
     #[export]
     /// A target node for the flock to follow.
     target: Option<Gd<Node3D>>,
-    pub boids: FxIndexMap<i64, Gd<Boid3D>>,
+    pub boids: FxIndexMap<InstanceId, Gd<Boid3D>>,
     base: Base<Node3D>,
 }
 
 impl Flock3D {
-    pub fn register_boid(&mut self, boid_id: i64) {
-        let boid: Gd<Boid3D> = Gd::from_instance_id(InstanceId::from_i64(boid_id));
+    pub fn register_boid(&mut self, boid_id: InstanceId) {
+        let boid: Gd<Boid3D> = Gd::from_instance_id(boid_id);
         self.boids.insert(boid_id, boid.clone());
         get_singleton().bind_mut().register_boid_3d(boid_id, boid);
         let flock_id = self.get_id();
         godot_print!("[Flock3D:{flock_id}] boid {boid_id} registered");
     }
 
-    pub fn unregister_boid(&mut self, boid_id: i64) {
+    pub fn unregister_boid(&mut self, boid_id: InstanceId) {
         self.boids.shift_remove(&boid_id);
         get_singleton().bind_mut().unregister_boid_3d(boid_id);
         let flock_id = self.get_id();
@@ -63,8 +63,8 @@ impl Flock3D {
     #[func]
     #[inline(always)]
     /// Retrieve the ID of this flock.
-    pub fn get_id(&self) -> i64 {
-        self.base().instance_id().to_i64()
+    pub fn get_id(&self) -> InstanceId {
+        self.base().instance_id()
     }
 }
 
@@ -91,7 +91,7 @@ impl Flock for Flock3D {
     }
 
     #[inline(always)]
-    fn get_boids(&self) -> impl Iterator<Item = (&i64, (Vec3, Vec3, BoidProperties))> {
+    fn get_boids(&self) -> impl Iterator<Item = (&InstanceId, (Vec3, Vec3, BoidProperties))> {
         self.boids.iter().map(|(id, boid)| {
             let boid = boid.bind();
             (

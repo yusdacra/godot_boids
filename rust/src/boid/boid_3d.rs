@@ -1,5 +1,4 @@
 use super::*;
-use godot::prelude::*;
 
 use crate::{to_glam_vec, BoidProperties, Flock3D};
 
@@ -14,7 +13,7 @@ pub struct Boid3D {
     properties: Gd<BoidProperties>,
     props: BoidProperties,
     vel: Vec3,
-    flock_id: i64,
+    flock_id: Option<InstanceId>,
     base: Base<Node3D>,
 }
 
@@ -37,15 +36,15 @@ impl Boid3D {
     #[func]
     #[inline(always)]
     /// Get the ID of this boid.
-    pub fn get_id(&self) -> i64 {
-        self.base().instance_id().to_i64()
+    pub fn get_id(&self) -> InstanceId {
+        self.base().instance_id()
     }
 
     #[func]
     #[inline(always)]
     /// Get the flock ID of this boid.
-    pub fn get_flock_id(&self) -> i64 {
-        self.flock_id
+    pub fn get_flock_id(&self) -> InstanceId {
+        self.flock_id.expect("no flock id found set... this is a bug!")
     }
 }
 
@@ -63,7 +62,7 @@ impl INode3D for Boid3D {
         };
         let mut flock = flock.bind_mut();
         flock.register_boid(self.get_id());
-        self.flock_id = flock.get_id();
+        self.flock_id = Some(flock.get_id());
     }
 
     fn ready(&mut self) {
@@ -72,7 +71,7 @@ impl INode3D for Boid3D {
 
     fn exit_tree(&mut self) {
         let mut flock: Gd<Flock3D> =
-            Gd::from_instance_id(InstanceId::from_i64(self.get_flock_id()));
+            Gd::from_instance_id(self.get_flock_id());
         flock.bind_mut().unregister_boid(self.get_id());
     }
 }
@@ -102,7 +101,7 @@ impl Boid for Boid3D {
     }
 
     #[inline(always)]
-    fn get_flock_id(&self) -> i64 {
+    fn get_flock_id(&self) -> InstanceId {
         self.get_flock_id()
     }
 }
