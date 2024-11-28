@@ -15,7 +15,7 @@ _just-cmd *FLAGS="":
 build $target=(host-target) *FLAGS="": _setup-env
   cd rust; cross build {{FLAGS}} --profile {{profile}} --target {{target}}
 install $target=(host-target): _setup-env
-  mv -f rust/target/{{target}}/{{`$env.profiledir`}}/{{`$env.libprefix`}}boids.{{`$env.ext`}} {{artifact-dir}}/boids.{{`$env.arch`}}.{{`$env.ext`}}
+  mv -f rust/target/{{target}}/{{`$env.profiledir`}}/{{`$env.libprefix`}}boids.{{`$env.ext`}} {{artifact-dir}}/boids{{`$env.arch`}}.{{`$env.ext`}}
 build-install target=(host-target) *FLAGS="": (build target FLAGS) (install target)
 
 wasm: (build-install 'wasm32-unknown-emscripten' '+nightly' '-Zbuild-std')

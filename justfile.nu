@@ -6,7 +6,14 @@ let exts = {
 
 def getext [] { $exts | get $env.target }
 def getlibprefix [] { if ($env.target | str contains "linux") { "lib" } else { "" } }
-def getarch [] { $env.target | split row - | first }
+def getarch [] {
+    let arch = $env.target | split row - | first
+    if ($arch == "wasm32") {
+        ""
+    } else {
+        "." + $arch
+    }
+}
 def getprofiledir [] { if ($env.profile == 'dev') { "debug" } else { $env.profile }}
 
 def main [command: string] {

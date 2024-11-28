@@ -20,7 +20,7 @@ it's just a standard rust project under `rust`, so make sure you have `rustup` i
 also don't forget to have godot installed and available in your `PATH` (the extension currently targets 4.3).
 
 - **cargo features**
-	- enable `stats` feature to let the extension log into godot console some times for how its processing the boids.
+	- enable `stats` feature to let the extension log into godot console timings for how long its processing the boids.
 
 ## todo
 
