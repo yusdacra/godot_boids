@@ -11,7 +11,7 @@ it can handle about 2000 boids in a single flock at 11ms physics process tick on
 
 download it from the [asset library](https://godotengine.org/asset-library/asset/3284).
 
-or clone the repository, and run `just build-all` to build the libraries (in release mode) for all supported targets.
+or clone the repository, and run `just all` to build the libraries (in release mode) for all supported targets.
 (requires [cross](https://github.com/cross-rs/cross), [just](https://github.com/casey/just) and [nushell](https://github.com/nushell/nushell))
 
 currently, linux, windows and web (wasm) is supported.
