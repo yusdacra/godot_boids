@@ -14,6 +14,8 @@ download it from the [asset library](https://godotengine.org/asset-library/asset
 or clone the repository, and run `just build-all` to build the libraries (in release mode) for all supported targets.
 (requires [cross](https://github.com/cross-rs/cross), [just](https://github.com/casey/just) and [nushell](https://github.com/nushell/nushell))
 
+currently, linux, windows and web (wasm) is supported.
+
 ## development
 
 it's just a standard rust project under `rust`, so make sure you have `rustup` installed (or the toolchain specified under `rust-toolchain.toml`.)
