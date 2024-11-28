@@ -1,8 +1,9 @@
-set shell := ['nu', '-c']
+set shell := ['nu', 'justfile.nu']
+set export
 
 
 profile := 'dev'
-host-target := `rustc -vV | lines | skip 1 | to text | from csv -s : --noheaders | reduce -f {} {|el, acc| $acc | upsert $el.column0 $el.column1 } | get host`
+host-target := `rustc -vV | lines | skip 1 | to text | from csv -s : --noheaders | reduce -f {} {|el, acc| $acc | upsert $el.column0 $el.column1 } | get host | str trim`
 artifact-dir := 'addons/boids/lib'
 
 [private]
@@ -17,15 +18,19 @@ just-cmd *FLAGS="":
   @just -f {{justfile()}} {{FLAGS}}
 
 
-build ext $target=(host-target) *FLAGS="": setup-env
+build $target=(host-target) *FLAGS="": setup-env
   cd rust; cross build {{FLAGS}} --profile {{profile}} --target {{target}}
-  mv -f rust/target/{{target}}/{{ if profile == 'dev' { 'debug' } else { profile } }}/{{ if target =~ 'linux' { 'lib' } else { '' } }}boids.{{ext}} {{artifact-dir}}/boids.{{`$env.target | split row - | first`}}.{{ext}}
 
-build-wasm: (build 'wasm' 'wasm32-unknown-emscripten' '+nightly' '-Zbuild-std')
-build-windows: (build 'dll' 'x86_64-pc-windows-msvc')
-build-linux: (build 'so' 'x86_64-unknown-linux-gnu')
+install $target=(host-target): setup-env
+  mv -f rust/target/{{target}}/{{`$env.profiledir`}}/{{`$env.libprefix`}}boids.{{`$env.ext`}} {{artifact-dir}}/boids.{{`$env.arch`}}.{{`$env.ext`}}
 
-build-all: (just-cmd '--timestamp' 'profile=release' 'build-linux' 'build-windows' 'build-wasm')
+build-install target *FLAGS="": (build target FLAGS) (install target)
+
+wasm: (build-install 'wasm32-unknown-emscripten' '+nightly' '-Zbuild-std')
+windows: (build-install 'x86_64-pc-windows-msvc')
+linux: (build-install 'x86_64-unknown-linux-gnu')
+
+all: (just-cmd '--timestamp' 'profile=release' 'linux' 'windows' 'wasm')
 
 
 package:
