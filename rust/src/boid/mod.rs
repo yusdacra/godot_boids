@@ -46,12 +46,12 @@ pub fn calculate_boid(
     boid_vel: Vec3,
     boid_props: BoidProperties,
     flock_props: FlockProperties,
-    boids: Arc<Vec<(Vec3, Vec3)>>,
+    other_boids: Arc<Vec<(Vec3, Vec3)>>,
     target_position: Option<Vec3>,
 ) -> Vec3 {
     //godot::godot_print!("[Boids] executing from thread {:?}", rayon::current_thread_index());
 
-    let mut calced = boids
+    let mut calced = other_boids
         .par_iter()
         .fold(CalcArgs::identity, |mut acc, (aboid_pos, aboid_vel)| {
             let dist = boid_pos.distance_squared(*aboid_pos);
