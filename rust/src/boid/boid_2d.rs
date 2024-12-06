@@ -73,8 +73,7 @@ impl INode2D for Boid2D {
     }
 
     fn exit_tree(&mut self) {
-        let mut flock: Gd<Flock2D> =
-            Gd::from_instance_id(self.get_flock_id());
+        let mut flock: Gd<Flock2D> = Gd::from_instance_id(self.get_flock_id());
         flock.bind_mut().unregister_boid(self.get_id());
     }
 }

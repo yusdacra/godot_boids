@@ -3,13 +3,13 @@ use godot::prelude::*;
 
 use crate::BoidProperties;
 
-pub mod flock_properties;
 pub mod flock_2d;
 pub mod flock_3d;
+pub mod flock_properties;
 
-pub use flock_properties::*;
 pub use flock_2d::*;
 pub use flock_3d::*;
+pub use flock_properties::*;
 
 pub trait Flock {
     fn get_flock_properties(&self) -> &FlockProperties;

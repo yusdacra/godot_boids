@@ -44,7 +44,8 @@ impl Boid3D {
     #[inline(always)]
     /// Get the flock ID of this boid.
     pub fn get_flock_id(&self) -> InstanceId {
-        self.flock_id.expect("no flock id found set... this is a bug!")
+        self.flock_id
+            .expect("no flock id found set... this is a bug!")
     }
 }
 
@@ -72,8 +73,7 @@ impl INode3D for Boid3D {
     }
 
     fn exit_tree(&mut self) {
-        let mut flock: Gd<Flock3D> =
-            Gd::from_instance_id(self.get_flock_id());
+        let mut flock: Gd<Flock3D> = Gd::from_instance_id(self.get_flock_id());
         flock.bind_mut().unregister_boid(self.get_id());
     }
 }

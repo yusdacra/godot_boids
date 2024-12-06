@@ -12,8 +12,8 @@ use rayon::prelude::*;
 mod boid;
 mod flock;
 
-pub use boid::{*, Boid};
-pub use flock::{*, Flock};
+pub use boid::{Boid, *};
+pub use flock::{Flock, *};
 
 use rustc_hash::FxBuildHasher;
 
@@ -226,8 +226,10 @@ const fn to_glam_vec(godot_vec: Vector3) -> Vec3 {
 }
 
 #[inline(always)]
-fn process_boids<F, B>(boids: &mut FxIndexMap<InstanceId, Gd<B>>, flocks: &FxIndexMap<InstanceId, Gd<F>>)
-where
+fn process_boids<F, B>(
+    boids: &mut FxIndexMap<InstanceId, Gd<B>>,
+    flocks: &FxIndexMap<InstanceId, Gd<F>>,
+) where
     F: Flock + GodotClass,
     F: Bounds<Declarer = DeclUser>,
     B: Boid + GodotClass,
