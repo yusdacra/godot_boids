@@ -13,9 +13,8 @@ script/source = "extends Sprite2D
 @onready var boid: Boid2D = get_parent()
 
 func _process(delta: float) -> void:
-	var dir := boid.get_velocity().normalized()
-	var target_rot := atan2(dir.y, dir.x)
-	rotation = move_toward(rotation, target_rot, delta * PI * 2.0 * absf(target_rot - rotation))
+	var dir_target := boid.global_position + boid.get_velocity()
+	look_at(dir_target)
 "
 
 [node name="ExampleBoid" type="Boid2D"]
