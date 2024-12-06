@@ -2,7 +2,8 @@
 
 addon for Godot that adds 2D / 3D boids (flocking).
 
-![boids](./resources/boids.gif)
+![boids 2d](./resources/boids_2d.gif)
+![boids 3d](./resources/boids_3d.gif)
 
 it can handle about 2000 boids in a single flock at 11ms physics process tick on my PC (Ryzen 5600).
 (keep in mind this is without any partitioning of sorts, so it's bound to get better)
