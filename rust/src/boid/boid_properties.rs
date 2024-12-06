@@ -3,6 +3,9 @@ use godot::prelude::*;
 #[derive(Default, Clone, Debug, GodotClass)]
 #[class(init, base=Resource)]
 /// Properties for a 2D/3D boid.
+/// 
+/// Note that these properties are used as is and do not get scaled / translated between 2D / 3D units.
+/// So copying 2D properties to a 3D boid will *not* behave the same.
 pub struct BoidProperties {
     #[export]
     #[init(val = 4.0)]
