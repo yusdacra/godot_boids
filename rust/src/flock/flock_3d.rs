@@ -15,7 +15,7 @@ pub struct Flock3D {
     #[export]
     /// Properties of this flock.
     /// Note: this cannot be changed in runtime, aside from removing and readding the node.
-    properties: Gd<FlockProperties>,
+    properties: Option<Gd<FlockProperties>>,
     props: FlockProperties,
     #[export]
     /// A target node for the flock to follow.
@@ -48,7 +48,9 @@ impl INode3D for Flock3D {
     }
 
     fn ready(&mut self) {
-        self.props = self.properties.bind().clone();
+        if let Some(props) = self.properties.as_ref() {
+            self.props = props.bind().clone();
+        }
     }
 
     fn exit_tree(&mut self) {

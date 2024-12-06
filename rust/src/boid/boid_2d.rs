@@ -10,7 +10,7 @@ pub struct Boid2D {
     #[export]
     /// The properties of this boid.
     /// Note: this cannot be changed in runtime, aside from removing and readding the node.
-    properties: Gd<BoidProperties>,
+    properties: Option<Gd<BoidProperties>>,
     props: BoidProperties,
     vel: Vec2,
     flock_id: Option<InstanceId>,
@@ -67,7 +67,9 @@ impl INode2D for Boid2D {
     }
 
     fn ready(&mut self) {
-        self.props = self.properties.bind().clone();
+        if let Some(props) = self.properties.as_ref() {
+            self.props = props.bind().clone();
+        }
     }
 
     fn exit_tree(&mut self) {
