@@ -7,7 +7,7 @@ addon for Godot that adds 2D / 3D boids (flocking).
 it can handle about 2000 boids in a single flock at 11ms physics process tick on my PC (Ryzen 5600).
 (keep in mind this is without any partitioning of sorts, so it's bound to get better)
 
-## usage
+## install
 
 download it from the [asset library](https://godotengine.org/asset-library/asset/3284).
 
@@ -15,6 +15,11 @@ or clone the repository, and run `just all` to build the libraries (in release m
 (requires [cross](https://github.com/cross-rs/cross), [just](https://github.com/casey/just) and [nushell](https://github.com/nushell/nushell))
 
 currently, linux, windows and web (wasm) is supported.
+
+## usage
+
+take a look at the [examples](./examples/boids/).
+the addon folder also contains [a set of default properties extracted from the examples](./addons/boids/defaults/).
 
 ## development
 

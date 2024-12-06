@@ -1,0 +1,6 @@
+[gd_resource type="FlockProperties" format=3 uid="uid://cr1ysckawaeow"]
+
+[resource]
+goal_seperation = 4.0
+goal_alignment = 16.0
+goal_cohesion = 16.0

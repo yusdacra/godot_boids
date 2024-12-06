@@ -1,0 +1,5 @@
+[gd_resource type="BoidProperties" format=3 uid="uid://be12p6dxpuvg5"]
+
+[resource]
+alignment = 1.0
+cohesion = 0.8

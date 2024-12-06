@@ -1,0 +1,5 @@
+[gd_resource type="BoidProperties" format=3 uid="uid://bnlws4wqnydj0"]
+
+[resource]
+max_speed = 0.2
+max_force = 0.04

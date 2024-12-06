@@ -1,14 +1,13 @@
 [gd_scene load_steps=4 format=3 uid="uid://op0qicvpbjt6"]
 
 [ext_resource type="Script" path="res://examples/boids/2d/simple/example.gd" id="1_3gcrf"]
+[ext_resource type="FlockProperties" uid="uid://6iwscl4up3tg" path="res://addons/boids/defaults/2d_flock_properties.tres" id="2_2xgek"]
 
 [sub_resource type="Environment" id="Environment_jxsqf"]
 background_mode = 3
 glow_enabled = true
 glow_bloom = 0.2
 glow_blend_mode = 1
-
-[sub_resource type="FlockProperties" id="FlockProperties_cvyp0"]
 
 [node name="Example" type="Node2D"]
 script = ExtResource("1_3gcrf")
@@ -17,7 +16,7 @@ script = ExtResource("1_3gcrf")
 environment = SubResource("Environment_jxsqf")
 
 [node name="Flock" type="Flock2D" parent="."]
-properties = SubResource("FlockProperties_cvyp0")
+properties = ExtResource("2_2xgek")
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(576, 324)
