@@ -24,4 +24,10 @@ linux: (build-install 'x86_64-unknown-linux-gnu')
 all: (_just-cmd '--timestamp' 'profile=release' 'linux' 'windows' 'wasm')
 
 package:
-  run-external 'zip' '-r' 'boids-release.zip' 'addons' 'examples' 'README.md' 'LICENSE.txt'
+  rm -rf boids-release.zip builds
+  mkdir builds/addons
+  touch builds/.gdignore
+  cp -rf addons/boids builds/addons/
+  cp -f README.md LICENSE.txt builds/addons/boids/
+  cp -rf examples README.md LICENSE.txt builds/
+  cd builds; run-external 'zip' '-r' '../boids-release.zip' 'addons' 'examples' 'README.md' 'LICENSE.txt'

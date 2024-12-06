@@ -1,0 +1,25 @@
+[gd_scene load_steps=3 format=3 uid="uid://1pug7bs83oif"]
+
+[ext_resource type="PackedScene" uid="uid://bqklv2qo52yic" path="res://examples/boids/3d/example_boid.blend" id="1_4juxv"]
+
+[sub_resource type="GDScript" id="GDScript_i7ix1"]
+script/source = "extends Node3D
+
+@onready var boid: Boid3D = get_parent()
+@onready var mesh: MeshInstance3D = get_node(\"Cube\")
+
+func _ready() -> void:
+	var mat: StandardMaterial3D = mesh.get_active_material(1).duplicate(true)
+	mat.albedo_color = Color(randf(), randf(), randf())
+	mesh.set_surface_override_material(1, mat)
+
+func _process(delta: float) -> void:
+	var dir_target := boid.global_position + boid.get_velocity()
+	look_at_from_position(boid.global_position, dir_target)
+"
+
+[node name="ExampleBoid" type="Boid3D"]
+
+[node name="example_boid" parent="." instance=ExtResource("1_4juxv")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+script = SubResource("GDScript_i7ix1")

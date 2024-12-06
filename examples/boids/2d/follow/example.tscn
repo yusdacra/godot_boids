@@ -66,3 +66,6 @@ target = NodePath("../Path2D3/PathFollow2D")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_8ucif")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)

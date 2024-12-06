@@ -5,6 +5,7 @@ func _ready() -> void:
 		if flock is not Flock2D: continue
 		var color = Color(randf_range(0.8, 1.5), randf_range(0.8, 1.5), randf_range(0.2, 1.5), 1)
 		for i in 100: spawnBoid(flock, color)
+	DebugCam.add_debug_cam(self)
 
 func _process(delta: float) -> void:
 	$Path2D/PathFollow2D.progress_ratio += delta * 0.125

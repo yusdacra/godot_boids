@@ -5,6 +5,7 @@ func _ready() -> void:
 		if flock is not Flock2D: continue
 		var color = Color(randf(), randf(), randf(), 1)
 		for i in 2000: spawnBoid(flock, color)
+	DebugCam.add_debug_cam(self)
 
 func spawnBoid(flock: Flock2D, color: Color) -> void:
 	var boid: Boid2D = preload("../example_boid.tscn").instantiate()

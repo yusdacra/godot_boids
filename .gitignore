@@ -3,4 +3,7 @@
 /android/
 rust/target
 /addons/boids/lib/*
+
 /boids-release.zip
+/builds
+*.blend1

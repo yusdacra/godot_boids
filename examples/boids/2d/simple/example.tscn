@@ -18,3 +18,6 @@ environment = SubResource("Environment_jxsqf")
 
 [node name="Flock" type="Flock2D" parent="."]
 properties = SubResource("FlockProperties_cvyp0")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(576, 324)
